@@ -1,32 +1,32 @@
 [package]
-name = "verneuil"
-version = "0.6.4"
-description = "A sqlite VFS for asynchronous replication to S3-compatible blob stores"
-license = "MIT"
-repository = "https://github.com/backtrace-labs/verneuil"
 authors = ["Backtrace I/O <team@backtrace.io>"]
+description = "A sqlite VFS for asynchronous replication to S3-compatible blob stores"
 edition = "2018"
+license = "MIT"
+name = "verneuil"
+repository = "https://github.com/backtrace-labs/verneuil"
+version = "0.6.4"
 
 [lib]
 crate-type = ["lib", "staticlib"]
 
 [[example]]
-name = "verneuil_vfs"
 crate-type = ["cdylib"]
+name = "verneuil_vfs"
 required-features = ["dynamic_vfs"]
 
 [[example]]
-name = "verneuilctl"
 crate-type = ["bin"]
+name = "verneuilctl"
 required-features = ["vendor_sqlite"]
 
 [[example]]
-name = "rusqlite_integration"
 crate-type = ["bin"]
+name = "rusqlite_integration"
 
 [features]
+dynamic_vfs = [] # Build the runtime-loadable VFS shared object; conflicts with vendor_sqlite.
 vendor_sqlite = []
-dynamic_vfs = []  # Build the runtime-loadable VFS shared object; conflicts with vendor_sqlite.
 
 # Consider the source db's ctime in the version id.
 #
@@ -43,31 +43,31 @@ dynamic_vfs = []  # Build the runtime-loadable VFS shared object; conflicts with
 # verneuil VFS and the regular Unix VFS on fault-prone storage.
 mix_ctime_in_version_id = []
 
-no_xattr = []  # Remove the xattr code to simulate feature-poor filesystems.
+no_xattr = [] # Remove the xattr code to simulate feature-poor filesystems.
 
-test_random_chunk_action = []  # Randomly decide what to do with base chunks
-test_vfs = ["blake2b_simd", "tracing-subscriber"]  # Build an archive for sqlite3 tests.
-test_validate_writes = ["test_vfs"]  # Validate snapshots after writes
-test_validate_reads = ["test_vfs"]  # Validate snapshots after reads as well (extra slow)
+test_random_chunk_action = [] # Randomly decide what to do with base chunks
 test_validate_all = ["test_validate_writes", "test_validate_reads"]
+test_validate_reads = ["test_vfs"] # Validate snapshots after reads as well (extra slow)
+test_validate_writes = ["test_vfs"] # Validate snapshots after writes
+test_vfs = ["blake2b_simd", "tracing-subscriber"] # Build an archive for sqlite3 tests.
 
 [dependencies]
-attohttpc = { version = "0.18", default-features = false }
+attohttpc = {version = "0.18", default-features = false}
 backtrace = "0.3"
 # We use blake2b to compare the actual db file and our replicated snapshot,
 # but only during tests.
-blake2b_simd = { version = "1", optional = true }
-chrono = { version = "0.4", features = ["serde"] }
+blake2b_simd = {version = "1", optional = true}
+chrono = {version = "0.4", features = ["serde"]}
 # Having dev dependencies as optional makes it possible to
 # build verneuil's examples out of tree.
-clap = { version = "3", optional = true }
+clap = {version = "3", optional = true}
 crossbeam-channel = "0.5"
-governor = { version = "0.4", default-features = false, features = ["std", "jitter"] }  # 0.4 doesn't build without "jitter"
+governor = {version = "0.4", default-features = false, features = ["std", "jitter"]}# 0.4 doesn't build without "jitter"
 itertools = "0.10"
 kismet-cache = "0.2"
 lazy_static = "1"
 libc = "0.2"
-lru = { version = "0.7", default-features = false }  # Disable hashbrown
+lru = {version = "0.7", default-features = false}# Disable hashbrown
 memmap2 = "0.5"
 percent-encoding = "2"
 prost = "0.9"
@@ -75,22 +75,22 @@ quinine = "0.2"
 rand = "0.8"
 rayon = "1.5"
 regex = "1"
-rust-s3 = { version = "0.28", default-features = false, features = ["tokio-rustls-tls", "blocking"] }
-serde = { version = "1.0", features = ["derive"] }
+rust-s3 = {version = "0.28", features = ["tokio-rustls-tls", "blocking"]}
+serde = {version = "1.0", features = ["derive"]}
 serde_json = "1.0"
 tempfile = "3"
-tokio = { version = "1", features = ["rt", "time"], default-features = false }
+tokio = {version = "1", features = ["rt", "time"], default-features = false}
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", optional = true, features = ["tracing-log"] }  # Also collect log! calls.
+tracing-subscriber = {version = "0.3", optional = true, features = ["tracing-log"]}# Also collect log! calls.
 uluru = "3"
 umash = "0.4"
-uuid = { version = "0.8", features = ["v4"] }
+uuid = {version = "0.8", features = ["v4"]}
 zstd = "0.11"
 
 [dev-dependencies]
-rusqlite = { version = "0.26" }  # For the sample rusqlite_integration.
-tracing-subscriber = { version = "0.3", features = ["env-filter", "tracing-log"] }  # Examples set up tracing.
-clap = { version = "3", features = ["derive"] }
+clap = {version = "3", features = ["derive"]}
+rusqlite = {version = "0.26"}# For the sample rusqlite_integration.
+tracing-subscriber = {version = "0.3", features = ["env-filter", "tracing-log"]}# Examples set up tracing.
 
 [build-dependencies]
 cc = "1"
